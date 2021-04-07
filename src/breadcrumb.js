@@ -14,24 +14,24 @@ const COLOR = '#e52b50';
 const TEXT_COLOR = 'black';
 const DISABLE_TEXT_COLOR = 'grey'
 
-const Crumb = ({ isCrumbActive, index, text, firstCrumbStyle, lastCrumbStyle, crumbStyle, activeCrumbStyle, crumbTextStyle, activeCrumbTextStyle,
+const Crumb = ({ isCrumbActive, index, data, firstCrumbStyle, lastCrumbStyle, crumbStyle, activeCrumbStyle, crumbTextStyle, activeCrumbTextStyle,
   onCrumbPress, height, triangleHeadStyle, triangleTailStyle }) => {
   return (
     <TouchableOpacity
       style={[
         styles.crumbStyle,
         crumbStyle,
-        isCrumbActive ? [styles.activeCrumbStyle, activeCrumbStyle] : {},
+        isCrumbActive ? [activeCrumbStyle] : {},
         firstCrumbStyle,
         lastCrumbStyle,
-        { height }]}
+        { height }, {backgroundColor: data.color}]}
       onPress={() => onCrumbPress(index)}
       activeOpacity={1}
     >
       {Platform.OS === 'android' && !firstCrumbStyle ? <View style={{ width: height / 2.0, height, backgroundColor: 'transparent' }} /> : null}
       <View style={styles.crumbContainer}>
         {isCrumbActive && !firstCrumbStyle ? <View style={[styles.leftTriangleContainer, styles.triangleTail, triangleTailStyle, { left: - height / 2 }, Platform.OS === 'android' ? { top: -2 } : {}]} /> : null}
-        <Text
+        {/* <Text
           style={[
             styles.crumbTextStyle,
             crumbTextStyle,
@@ -40,7 +40,8 @@ const Crumb = ({ isCrumbActive, index, text, firstCrumbStyle, lastCrumbStyle, cr
           ellipsizeMode="tail"
         >
           {'  ' + text + ' '}
-        </Text>
+        </Text> */}
+        {data.component}
         {isCrumbActive && !lastCrumbStyle ? <View style={[styles.rightTriangleContainer, styles.triangleHead, triangleHeadStyle, { right: - height / 2 }, Platform.OS === 'android' ? { top: -2 } : {}]} /> : null}
       </View>
       {Platform.OS === 'android' && !lastCrumbStyle ? <View style={{ width: height / 2.0 , height, backgroundColor: 'white' }} /> : null}
@@ -79,7 +80,7 @@ const Breadcrumb = ({ flowDepth, entities, borderRadius, crumbsContainerStyle, c
               key={index}
               index={index}
               isCrumbActive={flowDepth === index}
-              text={item}
+              data={item}
               onCrumbPress={isTouchable ? index => handleCrumbPress(index, flowDepth, onCrumbPress) : () => { }}
               firstCrumbStyle={index === 0 ? firstCrumbStyle : null}
               lastCrumbStyle={index === entities.length - 1 ? lastCrumbStyle : null}
